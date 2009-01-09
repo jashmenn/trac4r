@@ -23,6 +23,7 @@ DON'T USE IT IF YOU'RE AN ASSHOLE!
 =end
 
 require 'xmlrpc/client'
+require 'pp'
 
 module Trac
   class Query
@@ -32,15 +33,19 @@ module Trac
       end
       uri = URI.parse(url)
       use_ssl = (uri.scheme == 'https') ? true : false
-      @connection = XMLRPC::Client.new(uri.host,
-                                       uri.path,
-                                       uri.port,
-                                       nil,
-                                       nil,
-                                       user,
-                                       pass,
-                                       use_ssl,
-                                       nil)
+      @connection = XMLRPC::Client.new_from_uri(url)
+
+      # below is the default, which doesn't seem to work for me. I guess this
+      # should be an option...
+      # @connection = XMLRPC::Client.new(uri.host,
+      #                                  uri.path,
+      #                                  uri.port,
+      #                                  nil,
+      #                                  nil,
+      #                                  user,
+      #                                  pass,
+      #                                  use_ssl,
+      #                                  nil)
     end
     
     def query command, *args
